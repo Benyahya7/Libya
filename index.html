@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipeh Business Manager ULTIMATE</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .progress-container { background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 1rem; }
+        .progress-bar { background: var(--accent-blue); height: 100%; width: 0%; transition: width 0.5s ease; }
+        .badge-status { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+        .badge-low { background: var(--accent-red); color: white; }
+        .badge-ok { background: var(--accent-green); color: white; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1 style="font-size: 1.2rem; font-weight: 700;">Shipeh ULTIMATE</h1>
+            <p style="font-size: 0.7rem; color: var(--text-dim);">PREDICTIVE OPS SYSTEM</p>
+        </div>
+        <nav class="nav-links">
+            <div class="nav-item active" onclick="showView('dashboard')">Dashboard & Goals</div>
+            <div class="nav-item" onclick="showView('inventory')">Inventory & Stock</div>
+            <div class="nav-item" onclick="showView('trends')">Analytics Trends</div>
+            <div class="nav-item" onclick="showView('products')">My Products</div>
+            <div class="nav-item" onclick="showView('daily-entry')">Log Daily Data</div>
+            <div class="nav-item" onclick="showView('logs')">History</div>
+            <div style="margin-top: auto;"></div>
+            <div class="nav-item" onclick="showView('settings')">Settings & Fees</div>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <!-- Dashboard View -->
+        <section id="view-dashboard" class="view-section active">
+            <header style="margin-bottom: 2rem;">
+                <h2>Strategic Dashboard</h2>
+            </header>
+
+            <div class="card" style="margin-bottom: 2rem; border-left: 4px solid var(--accent-blue);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="font-size: 1rem;">Monthly Profit Goal</h3>
+                        <p style="color: var(--text-dim); font-size: 0.8rem;">Target: <span id="goal-target-val">$0</span></p>
+                    </div>
+                    <p style="font-weight: 700;" id="goal-percent">0%</p>
+                </div>
+                <div class="progress-container"><div class="progress-bar" id="goal-progress-bar"></div></div>
+            </div>
+            
+            <div class="stats-grid" id="global-stats"></div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Performance Snapshot</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Net Profit</th>
+                            <th>ROI</th>
+                            <th>Days of Stock Left</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-performance-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Inventory View -->
+        <section id="view-inventory" class="view-section">
+            <header style="margin-bottom: 2rem;">
+                <h2>Inventory Management</h2>
+                <p style="color: var(--text-dim);">Track current stock and automated restock predictions</p>
+            </header>
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Current Stock (pcs)</th>
+                            <th>Avg Daily Sales</th>
+                            <th>Estimated Duration</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-list-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Trends View -->
+        <section id="view-trends" class="view-section">
+            <header style="margin-bottom: 2rem;">
+                <h2>Analytics Trends</h2>
+            </header>
+            <div class="card" style="height: 350px;">
+                <canvas id="mainTrendsChart"></canvas>
+            </div>
+            <div class="form-grid" style="margin-top: 1.5rem;">
+                <div class="card">
+                    <h3 style="font-size: 0.9rem; margin-bottom: 1rem;">Agent Efficiency (%)</h3>
+                    <canvas id="agentChart" style="max-height: 200px;"></canvas>
+                </div>
+                <div class="card">
+                    <h3 style="font-size: 0.9rem; margin-bottom: 1rem;">Spend Efficiency</h3>
+                    <canvas id="efficiencyChart" style="max-height: 200px;"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products View -->
+        <section id="view-products" class="view-section">
+            <header style="margin-bottom: 2rem; display: flex; justify-content: space-between;">
+                <h2>Manage Products</h2>
+                <button class="btn btn-primary" onclick="toggleForm('product-form')">+ New Product</button>
+            </header>
+            <div id="product-form" class="card hidden">
+                <form id="new-product-form" class="form-grid">
+                    <div class="input-group"><label>Name</label><input type="text" id="p-name" required></div>
+                    <div class="input-group"><label>Price ($)</label><input type="number" id="p-price" step="0.01" required></div>
+                    <div class="input-group"><label>Cost ($)</label><input type="number" id="p-cost" step="0.01" required></div>
+                    <div class="input-group"><label>Initial Stock</label><input type="number" id="p-stock" value="100"></div>
+                    <div class="input-group"><label>Market</label><select id="p-market"><option value="libya">Libya</option><option value="iraq">Iraq</option></select></div>
+                    <div class="input-group" style="align-items: flex-end;"><button type="submit" class="btn btn-primary">Save Product</button></div>
+                </form>
+            </div>
+            <div class="card"><table><thead><tr><th>Name</th><th>Market</th><th>Stock</th><th>Actions</th></tr></thead><tbody id="product-list-body"></tbody></table></div>
+        </section>
+
+        <!-- Daily Entry View -->
+        <section id="view-daily-entry" class="view-section">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                <div class="card">
+                    <h2>Log Daily Numbers</h2>
+                    <form id="daily-log-form" class="form-grid" style="margin-top: 1.5rem;">
+                        <div class="input-group"><label>Date</label><input type="date" id="log-date" required></div>
+                        <div class="input-group"><label>Product</label><select id="log-product" required onchange="calculateSmartSignals()"></select></div>
+                        <div class="input-group"><label>Agent / Caller</label><input type="text" id="log-agent" placeholder="e.g. Sarah"></div>
+                        <div class="input-group"><label>Ad Spend ($)</label><input type="number" id="log-spend" step="0.01" required oninput="calculateSmartSignals()"></div>
+                        <div class="input-group"><label>Leads</label><input type="number" id="log-leads" required oninput="calculateSmartSignals()"></div>
+                        <div class="input-group"><label>Confirmed</label><input type="number" id="log-confirmed" required oninput="calculateSmartSignals()"></div>
+                        <div class="input-group"><label>Delivered</label><input type="number" id="log-delivered" required oninput="calculateSmartSignals()"></div>
+                        <button type="submit" class="btn btn-success" style="grid-column: span 2;">Save Entry</button>
+                    </form>
+                </div>
+                <div class="card" id="smart-calculator">
+                    <h3 style="font-size: 0.9rem; color: var(--accent-blue);">PREDICTIVE SIGNALS</h3>
+                    <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="stat-mini">
+                            <label>Break-even CPL (Max)</label>
+                            <p id="calc-max-cpl" style="font-size: 1.4rem; font-weight: 700;">$0.00</p>
+                        </div>
+                        <div class="stat-mini" id="stock-warning" style="display:none">
+                            <label style="color: var(--accent-red);">LOW STOCK ALERT</label>
+                            <p style="font-size: 0.8rem;">You have less than <span id="days-left-warn"></span> days left.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logs View -->
+        <section id="view-logs" class="view-section">
+            <header style="margin-bottom: 2rem; display: flex; justify-content: space-between;">
+                <h2>Historical Logs</h2>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn" style="background: #333;" onclick="exportCSV()">CSV</button>
+                    <button class="btn" style="background: #333;" onclick="backupJSON()">Backup</button>
+                    <label class="btn" style="background: #333; cursor: pointer;">Restore <input type="file" style="display:none" onchange="restoreJSON(event)"></label>
+                </div>
+            </header>
+            <div class="card"><table><thead><tr><th>Date</th><th>Product</th><th>Agent</th><th>ROI</th><th>Profit</th><th>Actions</th></tr></thead><tbody id="logs-history-body"></tbody></table></div>
+        </section>
+
+        <!-- Settings View -->
+        <section id="view-settings" class="view-section">
+            <header style="margin-bottom: 2rem;">
+                <h2>Ultimate System Settings</h2>
+            </header>
+            <div class="form-grid">
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;">Monthly Profit Goal</h3>
+                    <div class="input-group">
+                        <label>Target Profit ($)</label>
+                        <input type="number" id="setting-goal" value="5000">
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 1rem;" onclick="saveSettings()">Save Configuration</button>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;">Exchange Rates</h3>
+                    <div class="input-group"><label>1 USD = (LYD)</label><input type="number" id="rate-lyd" value="4.80" step="0.1"></div>
+                    <div class="input-group" style="margin-top: 0.5rem;"><label>1 USD = (IQD)</label><input type="number" id="rate-iqd" value="1310" step="1"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

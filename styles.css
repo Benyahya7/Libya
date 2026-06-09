@@ -1,0 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-dark: #0a0c10;
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --accent-blue: #007aff;
+    --accent-green: #34c759;
+    --accent-red: #ff3b30;
+    --text-main: #f5f5f5;
+    --text-dim: #8e8e93;
+    --glass-blur: blur(20px);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(circle at 0% 0%, rgba(0, 122, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(52, 199, 89, 0.05) 0%, transparent 50%);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Sidebar & Navigation */
+.sidebar {
+    width: 260px;
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border-right: 1px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 2rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.nav-links {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-item {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.nav-item.active {
+    background: var(--accent-blue);
+    color: white;
+}
+
+/* Main Layout */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.view-section {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.view-section.active {
+    display: block;
+}
+
+/* Forms & Modals */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+}
+
+input, select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    color: white;
+    font-size: 0.95rem;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.btn-primary { background: var(--accent-blue); }
+.btn-success { background: var(--accent-green); }
+.btn-danger { background: var(--accent-red); }
+
+.btn:hover { filter: brightness(1.2); }
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    padding: 1rem;
+    border-bottom: 2px solid var(--card-border);
+}
+
+td {
+    padding: 1.2rem 1rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.2rem;
+}
+
+.stat-val {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.trend-pos { color: var(--accent-green); }
+.trend-neg { color: var(--accent-red); }
+
+/* Utility */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hidden { display: none !important; }
